@@ -8,3 +8,13 @@ Then user should navigated to home page
 Examples:
 | username | password |
 | standard_user |secret_sauce |
+
+@loginexcel
+Scenario Outline: Check the Login functionality
+  Given User logs in using Excel row <RowNum>
+  Then user should navigated to home page
+
+Examples:
+  | RowNum |
+  | 1      |
+  | 2      |

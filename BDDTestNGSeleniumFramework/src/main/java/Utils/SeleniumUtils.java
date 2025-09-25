@@ -1,11 +1,13 @@
 package Utils;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.Alert;
@@ -14,6 +16,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+
 
 public class SeleniumUtils {
 	   WebDriver driver;
@@ -73,25 +77,21 @@ public class SeleniumUtils {
 	        }
 	        return true; // Product not found
 	    }
-	    public String[] getLoginDataFromExcel(int rowIndex) {
-	        String[] data = new String[2];
-	        try (FileInputStream fis = new FileInputStream("src/test/resources/testdata.xlsx");
+	    
+	    public static String getCellData(String filePath, String sheetName, int rowNum, int colNum) {
+	        try (FileInputStream fis = new FileInputStream(filePath);
 	             Workbook workbook = new XSSFWorkbook(fis)) {
-	            Sheet sheet = workbook.getSheetAt(0);
-	            Row row = sheet.getRow(rowIndex);
 
-	            if (row == null || row.getCell(0) == null || row.getCell(1) == null) {
-	                throw new IllegalArgumentException("Row or cell is missing");
-	            }
+	            Sheet sheet = workbook.getSheet(sheetName);
+	            Row row = sheet.getRow(rowNum);
+	            Cell cell = row.getCell(colNum);
 
-	            data[0] = row.getCell(0).toString();
-	            data[1] = row.getCell(1).toString();
-	        } catch (Exception e) {
+	            return cell.getStringCellValue();
+	        } catch (IOException e) {
 	            e.printStackTrace();
+	            return null;
 	        }
-	        return data;
 	    }
-	     
 	      
 	    }
 
